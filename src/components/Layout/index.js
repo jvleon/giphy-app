@@ -3,10 +3,11 @@ import styled from 'styled-components';
 export const MainContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding: 0 10%;
+  padding: 0;
 `;
 
 export const ImageContainer = styled.div`
   display: inlinex-flex;
-  heigth: 150px;
+  height: 150px;
+  flex-grow: 1;
 `;

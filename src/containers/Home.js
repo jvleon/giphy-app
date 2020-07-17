@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Navbar,
   NavbarBrand,
@@ -12,57 +13,70 @@ import {
   ImageContainer,
   MainContainer,
 } from '../components/Layout';
+import {
+  fetchSearchData,
+  fetchTrendingData,
+  resetData,
+} from '../actions';
 
-const Home = () => {
+const Home = ({ data, ...props }) => {
+  const [searchData, setSearchData] =  useState('');
+  useEffect(() => {
+    props.fetchTrendingData();
+  }, []);
+
+
+  const setTrending = () => {
+    props.resetData();
+    props.fetchTrendingData();
+  };
+
+  const handleChange = ({ target: { value } }) => {
+    setSearchData(value);
+  };
+
+  const handleClick = () => {
+    if(searchData.length > 0) {
+      props.resetData();
+      props.fetchSearchData(searchData);
+    }
+  };
+
   return (
     <>
-      <Navbar>
+      <Navbar color="dark">
         <NavbarBrand>
-          Gifs example API
+          <NavLink href="#" onClick={setTrending}>Top gifs</NavLink>
         </NavbarBrand>
-        <NavItem>
-          <NavLink href="#" onClick={() => alert('hello')}>Top gifs</NavLink>
-        </NavItem>
       </Navbar>
       <Row>
-        <Search />
+        <Search onChange={handleChange} onClick={handleClick} />
       </Row>
       <Row>
         <MainContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
-          <ImageContainer>
-            <Image />
-          </ImageContainer>
+         {
+           data.length > 0 && data.map(({ images }, i) => (
+             <ImageContainer>
+              <Image src={images.downsized.url} />
+             </ImageContainer>
+           ))
+         }
         </MainContainer>
       </Row>
     </>
   );
 };
 
-export default Home;
+const mapStateToProps = ({ data, currentSearch, loading }) => ({
+  data,
+  currentSearch,
+  loading,
+});
+
+const mapDispatchToProps = {
+  fetchSearchData,
+  fetchTrendingData,
+  resetData,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
