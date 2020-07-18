@@ -39,7 +39,8 @@ const Home = ({
   };
 
   const handleClick = () => {
-    if (searchData.length > 0) {
+    const query = searchData.trim();
+    if (query.length > 0) {
       props.resetData();
       props.fetchSearchData(searchData);
     }
