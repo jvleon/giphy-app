@@ -31,6 +31,7 @@ const Home = ({
   const setTrending = () => {
     props.resetData();
     props.fetchTrendingData();
+    setSearchData('');
   };
 
   const handleChange = ({ target: { value } }) => {
@@ -53,6 +54,18 @@ const Home = ({
         <Search onChange={handleChange} onClick={handleClick} />
       </Row>
       {
+        currentSearch
+        && (
+        <Row className="pl-4">
+          <div>
+            Resultados de la busqueda para
+            {' '}
+            <b>{currentSearch}</b>
+          </div>
+        </Row>
+        )
+      }
+      {
         loading
           ? (
             <Loader>
@@ -64,12 +77,12 @@ const Home = ({
             <Row>
               <MainContainer>
                 {
-            data.length > 0 && data.map(({ images, id }) => (
-              <ImageContainer key={id}>
-                <Image src={images.downsized.url} />
-              </ImageContainer>
-            ))
-          }
+                  data.length > 0 && data.map(({ images, id }) => (
+                    <ImageContainer key={id}>
+                      <Image src={images.downsized.url} />
+                    </ImageContainer>
+                  ))
+                }
               </MainContainer>
             </Row>
           )
@@ -83,6 +96,8 @@ Home.propTypes = {
   fetchSearchData: PropTypes.func.isRequired,
   fetchTrendingData: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired,
+  currentSearch: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ data, currentSearch, loading }) => ({
