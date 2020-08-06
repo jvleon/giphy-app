@@ -12,3 +12,5 @@
 - `cd giphy-app`
 - `yarn` or `npm install`
 - `yar start o npm start`
+
+[Demo][https://gifs-app-demo.herokuapp.com/]
